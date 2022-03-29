@@ -1,10 +1,23 @@
 package com.shekharkg.timerapp
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shekharkg.timerapp.data.Preference
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val preference: Preference) : ViewModel() {
+
+    private var _isTimerRunning: MutableLiveData<Long> = MutableLiveData(0)
+
+    init {
+        getTimeStamp()
+    }
+
+    fun isTimerRunning() = _isTimerRunning
+
+    fun getTimeStamp() {
+        _isTimerRunning.value = preference.getTimer()
+    }
 
 
     fun saveTimeStamp(duration: Int, unit: Int) {

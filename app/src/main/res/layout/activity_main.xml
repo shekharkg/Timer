@@ -17,10 +17,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:inputType="number"
         android:id="@+id/durationInput"
         android:layout_width="wrap_content"
+        android:hint="Duration"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
