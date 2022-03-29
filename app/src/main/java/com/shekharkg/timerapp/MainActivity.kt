@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.isTimerRunning().value?.let {
                 if (it > 0) {
                     viewModel.saveTimeStamp(0, 0)
+                    viewModel.stopTimer()
                 } else {
                     val duration = Integer.parseInt(binding.durationInput.text.trim().toString())
                     val unit = binding.durationUnit.selectedItemPosition
@@ -49,12 +50,21 @@ class MainActivity : AppCompatActivity() {
                 binding.durationInput.visibility = View.GONE
                 binding.durationUnit.visibility = View.GONE
                 binding.countdownTime.visibility = View.VISIBLE
+
             } else {
                 binding.actionButton.text = "START"
                 binding.durationInput.visibility = View.VISIBLE
                 binding.durationUnit.visibility = View.VISIBLE
                 binding.countdownTime.visibility = View.GONE
+
+                viewModel.setupTimer()
             }
         }
+
+        viewModel.remainingDuration().observe(this) {
+            binding.countdownTime.text = it
+        }
+
+        viewModel.setupTimer()
     }
 }

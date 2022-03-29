@@ -1,5 +1,7 @@
 package com.shekharkg.timerapp
 
+import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.shekharkg.timerapp.data.Preference
@@ -9,11 +11,41 @@ class MainViewModel @Inject constructor(private val preference: Preference) : Vi
 
     private var _isTimerRunning: MutableLiveData<Long> = MutableLiveData(0)
 
+    private var _remainingDuration: MutableLiveData<String> = MutableLiveData("")
+
+    private var timer: CountDownTimer? = null
+
     init {
         getTimeStamp()
     }
 
+    fun setupTimer() {
+        val duration = preference.getTimer()
+        if (duration <= 0) return
+
+        timer = object : CountDownTimer(duration, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+
+                val seconds = (millisUntilFinished / 1000) % 60
+                val minutes = (millisUntilFinished / 1000) / 60
+                _remainingDuration.value = "$minutes : $seconds"
+                Log.e("TAG", "$millisUntilFinished")
+            }
+
+            override fun onFinish() {
+
+            }
+        }.start()
+    }
+
+    fun stopTimer() {
+        timer?.cancel()
+    }
+
     fun isTimerRunning() = _isTimerRunning
+
+    fun remainingDuration() = _remainingDuration
 
     fun getTimeStamp() {
         _isTimerRunning.value = preference.getTimer()
@@ -31,7 +63,7 @@ class MainViewModel @Inject constructor(private val preference: Preference) : Vi
             durationInMillis *= 60
         }
         //If its in hours i.e: unit == 0 then multiply again by 60*60 to convert to millis
-        else if (unit == 2) {
+        else if (unit == 0) {
             durationInMillis *= 60 * 60
         }
 
