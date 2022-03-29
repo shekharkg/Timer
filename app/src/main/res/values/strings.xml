@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TimerApp</string>
+
+    <array name="duration_units">
+        <item>Hour</item>
+        <item>Minute</item>
+        <item>Second</item>
+    </array>
 </resources>

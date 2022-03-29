@@ -30,6 +30,7 @@
         android:id="@+id/durationUnit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:entries="@array/duration_units"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/durationInput" />
@@ -39,6 +40,7 @@
         android:id="@+id/actionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="START"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -15,7 +15,7 @@ class Preference constructor(context: Context) {
         sharedPreferences.edit().putLong(CONST_TIMER_SP, value).apply()
     }
 
-    fun getTimer() = sharedPreferences.getLong(CONST_TIMER_SP, 0)
+    fun getTimer() = sharedPreferences.getLong(CONST_TIMER_SP, 0) - System.currentTimeMillis()
 
 
     companion object {
