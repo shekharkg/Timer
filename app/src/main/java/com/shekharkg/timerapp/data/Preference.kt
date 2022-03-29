@@ -12,7 +12,7 @@ class Preference constructor(context: Context) {
     var sharedPreferences: SharedPreferences = context.getSharedPreferences("MyTimer", MODE_PRIVATE)
 
     fun setTimer(value: Long) {
-        sharedPreferences.edit().putLong(CONST_TIMER_SP, value).commit()
+        sharedPreferences.edit().putLong(CONST_TIMER_SP, value).apply()
     }
 
     fun getTimer() = sharedPreferences.getLong(CONST_TIMER_SP, 0) - System.currentTimeMillis()

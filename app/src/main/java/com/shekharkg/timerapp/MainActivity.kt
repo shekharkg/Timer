@@ -1,9 +1,13 @@
 package com.shekharkg.timerapp
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.shekharkg.timerapp.databinding.ActivityMainBinding
+import com.shekharkg.timerapp.service.TimerService
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -11,7 +15,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
 
     @Inject
     lateinit var viewModel: MainViewModel
@@ -24,6 +28,18 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+        checkForStartingService()
+    }
+
+    private fun checkForStartingService() {
+        viewModel.isTimerRunning().value?.let {
+            val service = Intent(this, TimerService::class.java)
+            if (it > 0) {
+                startService(service)
+            } else {
+                stopService(service)
+            }
+        }
     }
 
     private fun setupAction() {
@@ -32,13 +48,20 @@ class MainActivity : AppCompatActivity() {
                 if (it > 0) {
                     viewModel.saveTimeStamp(0, 0)
                     viewModel.stopTimer()
-                } else {
+                }
+
+                else {
                     val duration = Integer.parseInt(binding.durationInput.text.trim().toString())
                     val unit = binding.durationUnit.selectedItemPosition
+
+
                     viewModel.saveTimeStamp(duration, unit)
+
+                    viewModel.setupTimer()
                 }
 
                 viewModel.getTimeStamp()
+                checkForStartingService()
             }
         }
     }
@@ -51,13 +74,13 @@ class MainActivity : AppCompatActivity() {
                 binding.durationUnit.visibility = View.GONE
                 binding.countdownTime.visibility = View.VISIBLE
 
-            } else {
+            }
+
+            else {
                 binding.actionButton.text = "START"
                 binding.durationInput.visibility = View.VISIBLE
                 binding.durationUnit.visibility = View.VISIBLE
                 binding.countdownTime.visibility = View.GONE
-
-                viewModel.setupTimer()
             }
         }
 
